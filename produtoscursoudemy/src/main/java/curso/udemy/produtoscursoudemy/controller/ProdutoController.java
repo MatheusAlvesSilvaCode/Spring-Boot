@@ -5,6 +5,7 @@ import curso.udemy.produtoscursoudemy.model.Produto;
 import curso.udemy.produtoscursoudemy.repository.ProdutoRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,5 +37,22 @@ public class ProdutoController {
      public Produto obterPorId(@PathVariable("id") String id){
          Optional<Produto> produto = produtoRepository.findById(id);
          return produto.isPresent() ? produto.get() : null; // Temos o produto? se sim pegue get() se não null
+     }
+
+     @DeleteMapping("{id}")
+     public void deletar( @PathVariable("id") String id){
+        produtoRepository.deleteById(id);
+     }
+
+     @PutMapping("{id}") // Para atualizar  que já existe.
+     public void atualizar(@PathVariable("id") String id,
+                           @RequestBody Produto produto){
+        produto.setId(id);
+         produtoRepository.save(produto);
+     }
+
+     @GetMapping
+     public List<Produto> buscar(@RequestParam("nome") String nome){
+        return produtoRepository.findByNome(nome);
      }
 }
